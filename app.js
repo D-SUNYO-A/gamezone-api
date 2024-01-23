@@ -9,10 +9,9 @@ import { responseUtil } from "./utils/responseUtil.js";
 
 // Permettre l'accès depuis n'importe quelle origine
 const corsOptions = {
-    origin: (origin, callback) => {
-        callback(null, true);
-    },
+    origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 const uri = "mongodb+srv://sdanarson1:YF078se0zrRptXYn@cluster0.ebxzpgl.mongodb.net/blog?retryWrites=true&w=majority";
