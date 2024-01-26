@@ -1,17 +1,16 @@
 import http from "http";
 import cluster from "cluster";
 import os from 'os';
-import cors from "cors";
 import mongoose from "mongoose";
 import { postController } from "./controllers/postController.js";
 import { gameController } from "./controllers/gameController.js";
 import { responseUtil } from "./utils/responseUtil.js";
 
 // Permettre l'accès depuis n'importe quelle origine
-const corsOptions = {
-    origin: '*',
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+const handleCorsHeaders = (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 };
 
 const uri = "mongodb+srv://sdanarson1:YF078se0zrRptXYn@cluster0.ebxzpgl.mongodb.net/blog?retryWrites=true&w=majority";
@@ -33,7 +32,14 @@ if (cluster.isPrimary) {
     });
 } else {
     const app = http.createServer((req, res) => {
-        cors(corsOptions)(req, res, async () => {
+
+        handleCorsHeaders(req, res); // Ajoutez cette ligne pour gérer les en-têtes CORS
+
+        if (req.method === 'OPTIONS') {
+            // Répondez aux pré-vérifications CORS avec succès
+            res.writeHead(200);
+            res.end();
+        } else {
             if(req.url.startsWith('/uploads/')) {
                 postController.getUploadsPost(req, res, import.meta.url);
             } else if(req.url === '/api/posts' && req.method === 'POST') {
@@ -56,7 +62,7 @@ if (cluster.isPrimary) {
             }  else {
                 responseUtil.responseNotFound(res);
             }
-        });
+        }
     });  
     
     mongoose
