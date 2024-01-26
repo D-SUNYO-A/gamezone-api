@@ -36,8 +36,12 @@ if (cluster.isPrimary) {
         handleCorsHeaders(req, res); // Ajoutez cette ligne pour gérer les en-têtes CORS
 
         if (req.method === 'OPTIONS') {
-            // Répondez aux pré-vérifications CORS avec succès
-            res.writeHead(200);
+            // Répondez aux pré-vérifications CORS avec succès et incluez les en-têtes CORS
+            res.writeHead(200, {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            });
             res.end();
         } else {
             if(req.url.startsWith('/uploads/')) {
