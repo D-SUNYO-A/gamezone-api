@@ -1,11 +1,20 @@
 import http from "http";
 import cluster from "cluster";
 import os from 'os';
-import { connectToDatabase } from "./utils/DbConnection.js";
-import { corsMiddleware } from "./middleware/Cors.js";
+import mongoose from "mongoose";
 import { postController } from "./controllers/PostController.js";
 import { gameController } from "./controllers/GameController.js";
 import { responseUtil } from "./utils/ResponseUtil.js";
+
+// Permettre l'accès depuis n'importe quelle origine
+const handleCorsHeaders = (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Expose-Headers", "Content-Type, Authorization");
+};
+
+const uri = "mongodb+srv://sdanarson1:YF078se0zrRptXYn@cluster0.ebxzpgl.mongodb.net/blog?retryWrites=true&w=majority";
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,10 +34,17 @@ if (cluster.isPrimary) {
 } else {
     const app = http.createServer((req, res) => {
 
-        corsMiddleware.handleCorsHeaders(req, res); 
+        handleCorsHeaders(req, res); // Pour gérer les en-têtes CORS
 
         if (req.method === 'OPTIONS') {
-            corsMiddleware.resWriteHead(req, res); 
+            // Répondre aux pré-vérifications CORS avec succès et incluez les en-têtes CORS
+            res.writeHead(200, {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Expose-Headers": "Content-Type, Authorization",
+            });
+            res.end();
         } else {
             if(req.url.startsWith('/uploads/')) {
                 postController.getUploadsPost(req, res, import.meta.url);
@@ -55,8 +71,9 @@ if (cluster.isPrimary) {
         }
     });  
     
-    connectToDatabase()
-        .then(() => app.listen(PORT, () => {
+    mongoose
+        .connect(uri)
+        .then(result => app.listen(PORT, () => {
             console.log(`Server running on port ${PORT} and Connected to db`, process.pid);
         }))
         .catch(err => console.log(err))
