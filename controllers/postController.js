@@ -1,7 +1,6 @@
 import { Post } from "../models/postModel.js";
 import { uploadMiddleware } from "../middleware/upload.js";
 import { responseUtil } from "../utils/responseUtil.js";
-import { getDataUtil } from "../utils/getDataUtil.js";
 import { getFilePath } from "../utils/pathUtil.js";
 import * as fs from 'fs';
 

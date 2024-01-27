@@ -9,8 +9,9 @@ import { responseUtil } from "./utils/responseUtil.js";
 // Permettre l'accès depuis n'importe quelle origine
 const handleCorsHeaders = (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Expose-Headers", "Content-Type, Authorization");
 };
 
 const uri = "mongodb+srv://sdanarson1:YF078se0zrRptXYn@cluster0.ebxzpgl.mongodb.net/blog?retryWrites=true&w=majority";
@@ -33,14 +34,15 @@ if (cluster.isPrimary) {
 } else {
     const app = http.createServer((req, res) => {
 
-        handleCorsHeaders(req, res); // Ajoutez cette ligne pour gérer les en-têtes CORS
+        handleCorsHeaders(req, res); // Pour gérer les en-têtes CORS
 
         if (req.method === 'OPTIONS') {
-            // Répondez aux pré-vérifications CORS avec succès et incluez les en-têtes CORS
+            // Répondre aux pré-vérifications CORS avec succès et incluez les en-têtes CORS
             res.writeHead(200, {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
                 "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Expose-Headers": "Content-Type, Authorization",
             });
             res.end();
         } else {
