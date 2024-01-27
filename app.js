@@ -3,8 +3,9 @@ import cluster from "cluster";
 import os from 'os';
 import { handleRoutes } from "./routes.js";
 import { connectToDatabase } from "./utils/DbConnection.js";
-import ServerConfig from "./utils/ServerConfig.js";
 import { corsMiddleware } from "./middleware/Cors.js";
+
+const PORT = process.env.PORT || 3000;
 
 // Utilisez le nombre de cœurs physiques disponibles
 const numCPUs = os.cpus().length;
@@ -32,8 +33,8 @@ if (cluster.isPrimary) {
     });  
     
     connectToDatabase()
-        .then(() => app.listen(ServerConfig.port, () => {
-            console.log(`Server running on port ${ServerConfig.port} and Connected to db`, process.pid);
+        .then(() => app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT} and Connected to db`, process.pid);
         }))
         .catch(err => console.log(err))
 }

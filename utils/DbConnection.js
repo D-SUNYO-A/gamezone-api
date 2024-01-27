@@ -1,8 +1,8 @@
 // Connection to the Blog DataBase
 
 import mongoose from "mongoose";
-import ServerConfig from "./ServerConfig.js";
 
 export const connectToDatabase = () => {
-  return mongoose.connect(ServerConfig.uri);
+  const uri = "mongodb+srv://sdanarson1:YF078se0zrRptXYn@cluster0.ebxzpgl.mongodb.net/blog?retryWrites=true&w=majority";
+  return mongoose.connect(uri);
 };
