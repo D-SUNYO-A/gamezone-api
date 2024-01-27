@@ -1,7 +1,7 @@
-import { Post } from "../models/postModel.js";
-import { uploadMiddleware } from "../middleware/upload.js";
-import { responseUtil } from "../utils/responseUtil.js";
-import { getFilePath } from "../utils/pathUtil.js";
+import { Post } from "../models/PostModel.js";
+import { uploadMiddleware } from "../middleware/Upload.js";
+import { responseUtil } from "../utils/ResponseUtil.js";
+import { getFilePath } from "../utils/PathUtil.js";
 import * as fs from 'fs';
 
 export const postController = new (class {

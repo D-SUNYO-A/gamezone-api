@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { tokenUrl, urlParams } from "../utils/igdb.configs.js";
+import { tokenUrl, urlParams } from "../utils/IgdbConfig.js";
 
 export const igdbController = new (class {
   constructor() {}

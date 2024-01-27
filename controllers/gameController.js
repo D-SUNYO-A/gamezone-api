@@ -1,10 +1,10 @@
 import fetch from "node-fetch";
 import * as url from 'url';
-import { clientId } from "../utils/igdb.configs.js";
-import { gameUrl } from "../utils/urls.js";
-import { gameHypesRequestBody, gameSeachRequestBody } from "../utils/request.body.js";
-import { igdbController } from "./igdbController.js";
-import { responseUtil } from "../utils/responseUtil.js";
+import { clientId } from "../utils/IgdbConfig.js";
+import { gameUrl } from "../utils/Urls.js";
+import { gameHypesRequestBody, gameSeachRequestBody } from "../utils/RequestBody.js";
+import { igdbController } from "./IgdbController.js";
+import { responseUtil } from "../utils/ResponseUtil.js";
 
 // Nombre de jeux par page
 const gamesSize = 40;
